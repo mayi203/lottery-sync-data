@@ -40,7 +40,7 @@ jobs:
             python your_script.py
           else
             echo "使用手动传入的 start_date=$START_DATE"
-            python your_script.py --start $START_DATE
+            python sync.py --start $START_DATE
           fi
 
       - name: Upload JSON artifact (keep 3 days)
