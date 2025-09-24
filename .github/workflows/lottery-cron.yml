@@ -2,13 +2,8 @@ name: Run Lottery Script
 
 on:
   schedule:
-    - cron: "0 16 * * *"   # GitHub Actions 用 UTC，这里 16 点 = 北京/东京 0 点
+    - cron: "0 16 * * *"   # UTC 16:00 = 北京/东京 0:00
   workflow_dispatch:
-    inputs:
-      start_date:
-        description: '起始日期 (YYYY-MM-DD)，手动触发时可选'
-        required: false
-        default: ''
 
 jobs:
   run-lottery:
@@ -30,18 +25,8 @@ jobs:
 
       - name: Run script
         env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          START_DATE: ${{ github.event.inputs.start_date }}
-        run: |
-          if [ -z "$START_DATE" ]; then
-            echo "没有指定 start_date，使用脚本内逻辑"
-            python sync.py
-          else
-            echo "使用手动传入的 start_date=$START_DATE"
-            python sync.py --start $START_DATE
-          fi
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}   # ✅ 从 Secrets 注入
+        run: python sync.py
 
       - name: Upload JSON artifact (keep 3 days)
         uses: actions/upload-artifact@v4
