@@ -37,7 +37,7 @@ jobs:
         run: |
           if [ -z "$START_DATE" ]; then
             echo "没有指定 start_date，使用脚本内逻辑"
-            python your_script.py
+            python sync.py
           else
             echo "使用手动传入的 start_date=$START_DATE"
             python sync.py --start $START_DATE
